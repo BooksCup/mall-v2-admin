@@ -3,7 +3,7 @@
 <mapper namespace="com.bc.wd.mapper.OrderMapper">
 
     <select id="getPage" parameterType="map" resultType="orderModel">
-        SELECT r.*,
+        select r.*,
                 g.name as goods_name,
                 gk.attr as sku_name,
                 gk.image as sku_image,
@@ -11,16 +11,28 @@
                 ud.phone as buyer_phone,
                 ud.address as buyer_address,
                 od.delivery_number
-        FROM t_order r
-        LEFT JOIN t_goods g ON g.id = r.goods_id
-        LEFT JOIN t_goods_sku gk ON gk.id = r.sku_id
-        LEFT JOIN t_user_address ud ON r.user_id = ud.user_id AND ud.is_default = '1'
-        LEFT JOIN t_order_delivery od ON od.order_id = r.id
-        WHERE 1=1
+        from t_order r
+        left join t_goods g on g.id = r.goods_id
+        left join t_goods_sku gk on gk.id = r.sku_id
+        left join t_user_address ud on r.user_id = ud.user_id AND ud.is_default = '1'
+        left join t_order_delivery od on od.order_id = r.id
+        where 1 = 1
+        <if test="orderNo != null and orderNo != ''">
+            and r.order_no = #{orderNo}
+        </if>
         <if test="storeId != null and storeId != ''">
             and r.store_id = #{storeId}
         </if>
-        ORDER BY r.create_time DESC
+        <if test="status != null and status != ''">
+            and r.status = #{status}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            <![CDATA[ and r.create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null and endTime != ''">
+            <![CDATA[ and r.create_time <= #{endTime} ]]>
+        </if>
+        order by r.create_time desc
     </select>
 
     <update id="updateOrderStatus">

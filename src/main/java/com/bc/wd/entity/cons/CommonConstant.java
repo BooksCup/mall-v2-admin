@@ -1,11 +1,10 @@
 package com.bc.wd.entity.cons;
 
 /**
- * @program: whl-project
- * @description:
- * @author: Mr.Wang
- * @create: 2020-04-22 11:06
- **/
+ * 常量类
+ *
+ * @author zhou
+ */
 public class CommonConstant {
 
     public static final String HEADER_STORE_ID = "storeId";
@@ -30,4 +29,9 @@ public class CommonConstant {
 
     public static final String DELIVERY_TYPE_SELF_RAISING = "0";
     public static final String DELIVERY_TYPE_MAIL = "1";
+
+    /**
+     * 初始化hashmap容量
+     */
+    public static final int DEFAULT_HASH_MAP_CAPACITY = 16;
 }

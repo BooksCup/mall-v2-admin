@@ -35,7 +35,7 @@ public class SwaggerConfig {
         List<Parameter> pars = new ArrayList<Parameter>();
         ticketPar.name("storeId").description("登录校验")//name表示名称，description表示描述
                 .modelRef(new ModelRef("string")).parameterType("header")
-                .required(false).defaultValue("123123 ").build();//required表示是否必填，defaultvalue表示默认值
+                .required(false).build();//required表示是否必填，defaultvalue表示默认值
         pars.add(ticketPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)

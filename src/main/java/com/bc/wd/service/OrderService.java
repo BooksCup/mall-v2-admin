@@ -11,20 +11,27 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * @program: whl-project
- * @description:
- * @author: Mr.Wang
- * @create: 2020-04-22 11:47
- **/
+ * 订单
+ *
+ * @author zhou
+ */
 @Service
 public class OrderService {
 
     @Autowired
     private OrderMapper orderMapper;
 
-    public Result getPage(Map<String, Object> params, Integer pageSize, Integer page) {
-        PageHelper.startPage(page, pageSize);
-        Page<OrderModel> orderModelPage = orderMapper.getPage(params);
+    /**
+     * 获取订单分页数据
+     *
+     * @param paramMap 参数map
+     * @param pageNum  当前分页数
+     * @param pageSize 分页大小
+     * @return 订单分页数据
+     */
+    public Result getPage(Map<String, Object> paramMap, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        Page<OrderModel> orderModelPage = orderMapper.getPage(paramMap);
         return Result.success(orderModelPage.getResult(), orderModelPage.getTotal());
     }
 
