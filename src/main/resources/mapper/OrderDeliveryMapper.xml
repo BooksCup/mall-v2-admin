@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bc.wd.mapper.OrderDeliveryMapper">
+
+
+    <select id="getByOrderId" parameterType="string" resultType="orderDeliveryModel">
+        SELECT *
+        FROM  t_order_delivery
+        WHERE order_id = #{orderId}
+    </select>
+
+    <insert id="insert" parameterType="orderDeliveryModel">
+        INSERT INTO t_order_delivery
+        (id,order_id,delivery_type,delivery_company_id,delivery_company_name,delivery_number,create_time)
+        VALUES
+        (#{id},#{orderId},#{deliveryType},#{deliveryCompanyId},#{deliveryCompanyName},#{deliveryNumber},now())
+    </insert>
+</mapper>

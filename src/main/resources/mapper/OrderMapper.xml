@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bc.wd.mapper.OrderMapper">
+
+    <select id="getPage" parameterType="map" resultType="orderModel">
+        SELECT r.*,
+                g.name as goods_name,
+                gk.attr as sku_name,
+                gk.image as sku_image,
+                ud.name as buyer_name,
+                ud.phone as buyer_phone,
+                ud.address as buyer_address,
+                od.delivery_number
+        FROM t_order r
+        LEFT JOIN t_goods g ON g.id = r.goods_id
+        LEFT JOIN t_goods_sku gk ON gk.id = r.sku_id
+        LEFT JOIN t_user_address ud ON r.user_id = ud.user_id AND ud.is_default = '1'
+        LEFT JOIN t_order_delivery od ON od.order_id = r.id
+        WHERE 1=1
+        <if test="storeId != null and storeId != ''">
+            and r.store_id = #{storeId}
+        </if>
+        ORDER BY r.create_time DESC
+    </select>
+
+    <update id="updateOrderStatus">
+        UPDATE t_order
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

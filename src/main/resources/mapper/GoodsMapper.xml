@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bc.wd.mapper.GoodsMapper">
+
+    <resultMap id="getPageMap" type="goodsModel">
+        <result column="id" property="id"></result>
+        <result column="store_id" property="storeId"></result>
+        <result column="goods_number" property="goodsNumber"></result>
+        <result column="goods_class_id" property="goodsClassId"></result>
+        <result column="name" property="name"></result>
+        <result column="image" property="image"></result>
+        <result column="short_name" property="shortName"></result>
+        <result column="goods_price" property="goodsPrice"></result>
+        <result column="original_price" property="originalPrice"></result>
+        <result column="content" property="content"></result>
+        <result column="sort" property="sort"></result>
+        <result column="sales_volume" property="salesVolume"></result>
+        <result column="num" property="num"></result>
+        <result column="warning_inventory" property="warningInventory"></result>
+        <result column="status" property="status"></result>
+        <result column="brand_id" property="brandId"></result>
+        <result column="keyword" property="keyword"></result>
+        <result column="freight" property="freight"></result>
+        <result column="activity" property="activity"></result>
+        <result column="shop_id" property="shopId"></result>
+        <result column="show_address" property="showAddress"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="modify_time" property="modifyTime"></result>
+        <result column="delete_status" property="deleteStatus"></result>
+
+        <collection property="goodsLabelModelList" ofType="goodsLabelModel" select="getGoodsLabelModelList" column="id">
+        </collection>
+
+        <collection property="goodsImageModelList" ofType="goodsImageModel" select="getGoodsImageModelList" column="id">
+        </collection>
+
+    </resultMap>
+
+    <select id="getPage" parameterType="map" resultMap="getPageMap">
+        SELECT g.*
+        FROM t_goods g
+        WHERE 1=1
+        AND g.delete_status = '0'
+        <if test="storeId != null and storeId != ''">
+            AND g.store_id = #{storeId}
+        </if>
+        ORDER BY g.create_time DESC
+    </select>
+
+    <select id="getGoodsLabelModelList" parameterType="string" resultType="goodsLabelModel">
+        SELECT * FROM t_goods_label WHERE goods_id = #{goodsId} ORDER BY sort ASC
+    </select>
+
+    <select id="getGoodsImageModelList" parameterType="string" resultType="goodsImageModel">
+        SELECT * FROM t_goods_image WHERE goods_id = #{goodsId} ORDER BY sort ASC
+    </select>
+
+    <select id="getDetail" parameterType="string" resultType="goodsModel">
+        SELECT *
+        FROM t_goods g
+        WHERE g.id = #{id}
+    </select>
+
+    <select id="getMaxSort" resultType="integer" parameterType="string">
+        SELECT max(sort)
+        FROM t_goods
+        WHERE store_id = #{storeId}
+    </select>
+
+    <insert id="insert" parameterType="goodsModel">
+        INSERT INTO t_goods
+        (
+        id,store_id,goods_number,goods_class_id,name,
+        short_name,goods_price,original_price,content,sort,
+        sales_volume,tag,num,warning_inventory,
+        brand_id,keyword,freight,activity,shop_id,
+        show_address,create_time,image
+        )
+        VALUES
+        (
+        #{id},#{storeId},#{goodsNumber},#{goodsClassId},#{name},
+        #{shortName},#{goodsPrice},#{originalPrice},#{content},#{sort},
+        #{salesVolume},#{tag},#{num},#{warningInventory},
+        #{brandId},#{keyword},#{freight},#{activity},#{shopId},
+        #{showAddress},now(),#{image}
+        )
+    </insert>
+
+    <update id="update" parameterType="goodsModel">
+        UPDATE t_goods
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="shortName != null and shortName != ''">
+                short_name = #{shortName},
+            </if>
+            <if test="goodsPrice != null and goodsPrice != ''">
+                goods_price = #{goodsPrice},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="originalPrice != null and originalPrice != ''">
+                original_price = #{originalPrice},
+            </if>
+            <if test="num != null and num != ''">
+                num = #{num},
+            </if>
+            <if test="warningInventory != null and warningInventory != ''">
+                warning_inventory = #{warningInventory},
+            </if>
+            <if test="showAddress != null and showAddress != ''">
+                show_address = #{showAddress},
+            </if>
+            <if test="activity != null and activity != ''">
+                activity = #{activity},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+                modify_time = now(),
+            </if>
+            <if test="deleteStatus != null and deleteStatus != ''">
+                delete_status = #{deleteStatus},
+                modify_time = now(),
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+</mapper>

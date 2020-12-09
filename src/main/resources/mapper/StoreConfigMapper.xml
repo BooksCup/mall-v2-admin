@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bc.wd.mapper.StoreConfigMapper">
+
+    <select id="getAllByStoreId" parameterType="string" resultType="storeConfigModel">
+        SELECT *
+        FROM t_store_config
+        WHERE 1=1
+        AND store_id = #{storeId}
+        ORDER BY modify_date DESC
+    </select>
+
+    <update id="update" parameterType="storeConfigModel">
+        UPDATE t_store_config
+        <trim prefix="set" suffixOverrides=",">
+            <if test="appId != null and appId !=''">
+                AND app_id = #{appId}
+            </if>
+            <if test="appSecret != null and appSecret !=''">
+                AND app_secret = #{appSecret}
+            </if>
+            <if test="appDomainName != null and appDomainName !=''">
+                AND app_domain_name = #{appDomainName}
+            </if>
+            <if test="H5Domain != null and H5Domain !=''">
+                AND H5_domain = #{H5Domain}
+            </if>
+        </trim>
+        WHERE 1=1
+        AND id = #{id}
+    </update>
+</mapper>
